@@ -1,0 +1,17 @@
+{
+  "name": "headless-llm-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "react": "^19.2.8",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2"
+  }
+}
