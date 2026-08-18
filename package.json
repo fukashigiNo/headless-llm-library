@@ -1,6 +1,6 @@
 {
   "name": "headless-llm",
-  "version": "0.1.0",
+  "version": "0.1.1-Q",
   "description": "UI-agnostic React hooks for LLM streams and auto-scrolling",
   "files": [
     "dist"
@@ -22,9 +22,11 @@
   "keywords": [
     "react",
     "llm",
+    "chatgpt",
     "streaming",
+    "auto-scroll",
     "scroll",
-    "chat"
+    "headless"
   ],
   "author": "Бекарыс Барыс ak fukashigiNo",
   "license": "MIT",
