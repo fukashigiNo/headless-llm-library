@@ -1,56 +1,45 @@
-import { useRef, useEffect, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { AutoScroller } from '../../core/AutoScroller';
 
-export const useAutoScroll = <T extends HTMLElement = HTMLDivElement> () => {
-    const containerRef = useRef<T>(null)
-
-    const [isSticky, setIsSticky] = useState(true)
-    const isStickyRef = useRef(isSticky)
-    useEffect(() => {
-        isStickyRef.current = isSticky
-    }, [isSticky])
-
-    const scrollToBottom = useCallback(() => {
-        requestAnimationFrame(() => {
-            if (containerRef.current) { 
-                containerRef.current.scrollTop = containerRef.current.scrollHeight
-            }
-        })
-    }, [])
-
-    const handleScroll = useCallback(() => {
-        if (!containerRef.current) return
-
-        const {scrollTop, scrollHeight, clientHeight} = containerRef.current
-
-        const isABottom = Math.abs(scrollHeight - scrollTop - clientHeight)  < 20
-
-        setIsSticky(isABottom)
-    }, [])
-
-    useEffect(() => {
-        const container = containerRef.current
-        if(!container) return
-
-        const observer = new MutationObserver(() => {
-            if (isSticky) {
-                scrollToBottom()
-            }
-        })
-
-        observer.observe(container, {
-            childList: true,
-            subtree: true,
-            characterData: true
-        })
-  
-
-        return () => observer.disconnect()
-    }, [scrollToBottom])
-
-    return {
-        containerRef,
-        isSticky,
-        scrollToBottom,
-        handleScroll
-    }
+export interface UseAutoScrollOptions {
+  behavior?: ScrollBehavior;
+  threshold?: number;
 }
+
+export const useAutoScroll = <T extends HTMLElement = HTMLDivElement>(
+  options: UseAutoScrollOptions = {}
+) => {
+  const { behavior = 'auto', threshold = 20 } = options;
+
+  const containerRef = useRef<T>(null);
+  const [isSticky, setIsSticky] = useState(true);
+  const scrollerRef = useRef<AutoScroller | null>(null);
+
+  const scrollToBottom = useCallback(() => {
+    scrollerRef.current?.scrollToBottom();
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    scrollerRef.current = new AutoScroller({
+      container,
+      behavior,
+      threshold,
+      onStickyChange: (stickyState) => setIsSticky(stickyState),
+    });
+
+    scrollerRef.current.start();
+
+    return () => {
+      scrollerRef.current?.stop();
+    };
+  }, [behavior, threshold]);
+
+  return {
+    containerRef,
+    isSticky,
+    scrollToBottom,
+  };
+};
