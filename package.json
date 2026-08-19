@@ -1,5 +1,5 @@
 {
-  "name": "headless-llm",
+  "name": "@fukashigiNo/headless-llm",
   "version": "0.1.1-Q",
   "description": "UI-agnostic React hooks for LLM streams and auto-scrolling",
   "files": [
@@ -17,6 +17,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "test": "vitest run",
     "dev": "tsup --watch"
   },
   "keywords": [
@@ -35,11 +36,14 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "jsdom": "^29.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tsup": "^8.2.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^4.1.11"
   }
 }
