@@ -9,10 +9,20 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+    "./react": {
+      "require": "./dist/react.js",
+      "import": "./dist/react.mjs",
+      "types": "./dist/react.d.ts"
+    },
+    "./vue": {
+      "require": "./dist/vue.js",
+      "import": "./dist/vue.mjs",
+      "types": "./dist/vue.d.ts"
+    },
+    "./angular": {
+      "require": "./dist/angular.js",
+      "import": "./dist/angular.mjs",
+      "types": "./dist/angular.d.ts"
     }
   },
   "scripts": {
@@ -35,14 +45,22 @@
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "@angular/core": ">=16.0.0"
   },
   "peerDependenciesMeta": {
+    "react": { 
+      "optional": true 
+    },
     "vue": {
       "optional": true
+    },
+    "@angular/core": { 
+      "optional": true 
     }
   },
   "devDependencies": {
+    "@angular/core": "^21.2.22",
     "@testing-library/react": "^16.3.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -53,7 +71,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tsup": "^8.2.4",
-    "typescript": "^5.5.4",
+    "typescript": "^5.4.5",
     "vitest": "^4.1.11",
     "vue": "^3.5.42"
   }
