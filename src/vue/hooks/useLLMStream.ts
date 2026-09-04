@@ -1,6 +1,6 @@
 import { ref, readonly } from 'vue';
 
-export function useLLMStream(apiEndpoint = '/api/chat') {
+export const  useLLMStream = (apiEndpoint = '/api/chat') => {
   const messages = ref<{ role: string; content: string }[]>([]);
   const isStreaming = ref(false);
   const error = ref<string | null>(null);
