@@ -1,6 +1,6 @@
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
-export function useAutoScroll() {
+export const useAutoScroll = () => {
   const containerRef = ref<HTMLElement | null>(null);
   const isAutoScrollPaused = ref(false);
   let observer: MutationObserver | null = null;
