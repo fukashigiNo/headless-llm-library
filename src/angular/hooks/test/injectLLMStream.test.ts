@@ -1,21 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { injectLLMStream } from '../index';
+import { injectLLMStream } from '../injectLLMStream';
 
-describe('injectLLMStream (Angular)', () => {
+vi.mock('@angular/core', async (importOriginal) => {
+  const actual: any = await importOriginal();
+  return {
+    ...actual,
+    inject: (token: any) => {
+      if (token === actual.DestroyRef) {
+        return { onDestroy: vi.fn() };
+      }
+      return actual.inject(token); 
+    }
+  };
+});
+
+describe('injectLLMStream (Angular Isolated)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
   it('инициализируется с правильным базовым состоянием', () => {
-    // Запускаем внутри контекста Angular, чтобы inject(DestroyRef) сработал
-    TestBed.runInInjectionContext(() => {
-      const { messages, isStreaming, error } = injectLLMStream();
-      
-      expect(messages()).toEqual([]);
-      expect(isStreaming()).toBe(false);
-      expect(error()).toBe(null);
-    });
+    const { messages, isStreaming, error } = injectLLMStream();
+    
+    expect(messages()).toEqual([]);
+    expect(isStreaming()).toBe(false);
+    expect(error()).toBe(null);
   });
 
   it('успешно обрабатывает стриминг данных', async () => {
@@ -37,19 +46,17 @@ describe('injectLLMStream (Angular)', () => {
       body: { getReader: () => mockReader },
     });
 
-    await TestBed.runInInjectionContext(async () => {
-      const { messages, isStreaming, send } = injectLLMStream();
+    const { messages, isStreaming, send } = injectLLMStream();
 
-      const sendPromise = send('Привет');
-      
-      expect(isStreaming()).toBe(true);
-      expect(messages()[0].content).toBe('Привет');
-      
-      await sendPromise;
+    const sendPromise = send('Привет');
+    
+    expect(isStreaming()).toBe(true);
+    expect(messages()[0].content).toBe('Привет');
+    
+    await sendPromise;
 
-      expect(isStreaming()).toBe(false);
-      expect(messages().length).toBe(2);
-      expect(messages()[1].content).toBe('Hello, I am Angular!');
-    });
+    expect(isStreaming()).toBe(false);
+    expect(messages().length).toBe(2);
+    expect(messages()[1].content).toBe('Hello, I am Angular!');
   });
 });
