@@ -1,67 +1,54 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AutoScrollDirective } from '../index';
+import { describe, it, expect, vi } from 'vitest';
+import { AutoScrollDirective } from '../autoScrollDirective';
+import { ElementRef } from '@angular/core';
 
-@Component({
-  standalone: true,
-  imports: [AutoScrollDirective],
-  template: `
-    <div llmAutoScroll style="height: 100px; overflow-y: auto;" class="scroll-container">
-      <div style="height: 500px;">Контент</div>
-    </div>
-  `
-})
-class TestHostComponent {}
-
-describe('AutoScrollDirective', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
-  let container: HTMLElement;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestHostComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestHostComponent);
-    fixture.detectChanges(); 
+describe('AutoScrollDirective (Isolated)', () => {
+  it('ставит автоскролл на паузу, если пользователь прокрутил вверх', async () => {
+    const mockElement = document.createElement('div');
     
-    container = fixture.nativeElement.querySelector('.scroll-container');
-  });
+    Object.defineProperty(mockElement, 'scrollHeight', { value: 500, configurable: true });
+    Object.defineProperty(mockElement, 'clientHeight', { value: 100, configurable: true });
+    Object.defineProperty(mockElement, 'scrollTop', { value: 400, writable: true, configurable: true });
 
-  it('ставит автоскролл на паузу, если пользователь прокрутил вверх', () => {
-    Object.defineProperty(container, 'scrollHeight', { value: 500, configurable: true });
-    Object.defineProperty(container, 'clientHeight', { value: 100, configurable: true });
-    Object.defineProperty(container, 'scrollTop', { value: 400, writable: true, configurable: true });
+    const directive = new AutoScrollDirective(new ElementRef(mockElement));
+    directive.ngOnInit();
 
-    container.scrollTop = 350;
-    container.dispatchEvent(new Event('scroll'));
+    mockElement.scrollTop = 350;
+    directive.onScroll();
 
-    const mutationCallback = vi.spyOn(container, 'scrollTop', 'set');
+    const mutationCallback = vi.spyOn(mockElement, 'scrollTop', 'set');
     
-    container.appendChild(document.createElement('div'));
+    mockElement.appendChild(document.createElement('div'));
     
-    return Promise.resolve().then(() => {
-      expect(mutationCallback).not.toHaveBeenCalled();
-    });
+    await Promise.resolve(); 
+
+    expect(mutationCallback).not.toHaveBeenCalled();
+
+    directive.ngOnDestroy();
   });
 
   it('снимает паузу автоскролла, если прокрутить в самый низ', async () => {
-    Object.defineProperty(container, 'scrollHeight', { value: 500, configurable: true });
-    Object.defineProperty(container, 'clientHeight', { value: 100, configurable: true });
-    Object.defineProperty(container, 'scrollTop', { value: 0, writable: true, configurable: true });
+    const mockElement = document.createElement('div');
+    Object.defineProperty(mockElement, 'scrollHeight', { value: 500, configurable: true });
+    Object.defineProperty(mockElement, 'clientHeight', { value: 100, configurable: true });
+    Object.defineProperty(mockElement, 'scrollTop', { value: 0, writable: true, configurable: true });
 
-    container.dispatchEvent(new Event('scroll'));
+    const directive = new AutoScrollDirective(new ElementRef(mockElement));
+    directive.ngOnInit();
 
-    container.scrollTop = 400;
-    container.dispatchEvent(new Event('scroll'));
+    directive.onScroll();
 
-    const mutationCallback = vi.spyOn(container, 'scrollTop', 'set');
+    mockElement.scrollTop = 400;
+    directive.onScroll();
+
+    const mutationCallback = vi.spyOn(mockElement, 'scrollTop', 'set');
     
-    container.appendChild(document.createElement('div'));
+    mockElement.appendChild(document.createElement('div'));
     
-    await Promise.resolve(); 
+    await Promise.resolve();
     
     expect(mutationCallback).toHaveBeenCalled();
+
+    directive.ngOnDestroy();
   });
 });
