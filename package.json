@@ -1,55 +1,87 @@
 {
   "name": "@fukashigiNo/headless-llm",
-  "version": "0.1.1-Q",
-  "description": "UI-agnostic React hooks for LLM streams and auto-scrolling",
+  "version": "0.1.1",
+  "description": "UI-agnostic hooks and utilities for LLM streams and smart auto-scrolling (React, Vue, Angular)",
+  "license": "MIT",
+  "author": "Bekarys Barys (fukashigiNo)",
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/react.cjs",
+  "module": "./dist/react.js",
+  "types": "./dist/react.d.ts",
   "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.js"
+      },
+      "require": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.cjs"
+      }
+    },
     "./react": {
-      "require": "./dist/react.js",
-      "import": "./dist/react.mjs",
-      "types": "./dist/react.d.ts"
+      "import": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.js"
+      },
+      "require": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.cjs"
+      }
     },
     "./vue": {
-      "require": "./dist/vue.js",
-      "import": "./dist/vue.mjs",
-      "types": "./dist/vue.d.ts"
+      "import": {
+        "types": "./dist/vue.d.ts",
+        "default": "./dist/vue.js"
+      },
+      "require": {
+        "types": "./dist/vue.d.ts",
+        "default": "./dist/vue.cjs"
+      }
     },
     "./angular": {
-      "require": "./dist/angular.js",
-      "import": "./dist/angular.mjs",
-      "types": "./dist/angular.d.ts"
-    }
+      "import": {
+        "types": "./dist/angular.d.ts",
+        "default": "./dist/angular.js"
+      },
+      "require": {
+        "types": "./dist/angular.d.ts",
+        "default": "./dist/angular.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "tsup",
+    "dev": "tsup --watch",
     "test": "vitest",
-    "test:run": "vitest run",
-    "dev": "tsup --watch"
+    "test:run": "vitest run"
   },
   "keywords": [
     "react",
+    "vue",
+    "angular",
     "llm",
     "chatgpt",
     "streaming",
     "auto-scroll",
-    "scroll",
-    "headless"
+    "headless",
+    "ai"
   ],
-  "author": "Бекарыс Барыс ak fukashigiNo",
-  "license": "MIT",
   "peerDependencies": {
-    "@angular/core": ">=16.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "@angular/core": ">=16.0.0"
   },
   "peerDependenciesMeta": {
     "react": {
+      "optional": true
+    },
+    "react-dom": {
       "optional": true
     },
     "vue": {
@@ -76,5 +108,6 @@
     "unplugin-swc": "^1.5.11",
     "vitest": "^4.1.11",
     "vue": "^3.5.42"
-  }
+  },
+  "sideEffects": false
 }
