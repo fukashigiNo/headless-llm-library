@@ -6,13 +6,14 @@ export default defineConfig({
     react: 'src/react/index.ts',
     vue: 'src/vue/index.ts',
     angular: 'src/angular/index.ts',
+    svelte: 'src/svelte/index.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', 'vue', '@angular/core'],
+  external: ['react', 'react-dom', 'vue', '@angular/core', 'svelte'],
   outExtension({ format }) {
     return {
       js: format === 'cjs' ? '.cjs' : '.js',
