@@ -6,7 +6,6 @@ export default defineConfig({
     react: 'src/react/index.ts',
     vue: 'src/vue/index.ts',
     angular: 'src/angular/index.ts',
-    svelte: 'src/svelte/index.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,
